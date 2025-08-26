@@ -1,6 +1,7 @@
-# Full-Stack App with Automated DevOps Pipeline (AWS + Docker + Ansible) 🚀
+# Full-Stack App with Automated DevOps Pipeline      (AWS + Docker + Ansible) 🚀
 
-This project demonstrates a complete, end-to-end DevOps pipeline that automates the entire lifecycle of a web application—from infrastructure creation on AWS to continuous deployment. The application is a NodeJS Password Generator, showcasing modern DevOps practices and tools in action.
+This project demonstrates a complete, end-to-end DevOps pipeline that automates the entire lifecycle of a web application, from infrastructure creation on AWS to continuous deployment. 
+The application is a NodeJS Podcast Recommendation, showcasing modern DevOps practices and tools in action.
 
 ## 🛠️ Technology Stack
 
@@ -108,18 +109,6 @@ docker-compose up -d --force-recreate
 - Ansible installed locally
 - Docker and Docker Compose installed
 
-### Local Development
-```bash
-# Clone repository
-git clone https://github.com/NitzanNaveh/password-generator.git
-cd password-generator
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
 
 ### Required GitHub Secrets
 - `AWS_ACCESS_KEY_ID`
@@ -146,5 +135,8 @@ npm run dev
 
 ## 👤 Author
 
-**Nitzan Naveh** - [NitzanNaveh](https://github.com/NitzanNaveh)
+**Nitzan Naveh**
+**Hod Haim**
+**Tal Cohen**
+**Shahar Miller**
 
