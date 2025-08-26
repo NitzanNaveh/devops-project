@@ -1,10 +1,5 @@
 # Full-Stack App with Automated DevOps Pipeline (AWS + Docker + Ansible) 🚀
 
-[![CI Status](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml/badge.svg?branch=main&event=pull_request)](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml)
-[![CD Status](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml)
-[![Docker Pulls](https://img.shields.io/docker/pulls/nitzannaveh/moodcast)](https://hub.docker.com/r/nitzannaveh/moodcast)
-
-
 This project demonstrates a complete, end-to-end DevOps pipeline that automates the entire lifecycle of a web application—from infrastructure creation on AWS to continuous deployment. The application is a NodeJS Password Generator, showcasing modern DevOps practices and tools in action.
 
 ## 🛠️ Technology Stack
