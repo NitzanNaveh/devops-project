@@ -1,4 +1,5 @@
-# Full-Stack App with Automated DevOps Pipeline      (AWS + Docker + Ansible) 🚀
+# Full-Stack App with Automated DevOps Pipeline 
+## (AWS + Docker + Ansible) 🚀
 
 This project demonstrates a complete, end-to-end DevOps pipeline that automates the entire lifecycle of a web application, from infrastructure creation on AWS to continuous deployment. 
 The application is a NodeJS Podcast Recommendation, showcasing modern DevOps practices and tools in action.
