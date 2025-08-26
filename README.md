@@ -1,125 +1,152 @@
 # Full-Stack Application with Automated DevOps Pipeline 🚀
 
-[![CI Status](https://github.com/NitzanNaveh/repository/workflows/CI/badge.svg)](https://github.com/NitzanNaveh/repository/actions)
-[![CD Status](https://github.com/NitzanNaveh/repository/workflows/CD/badge.svg)](https://github.com/NitzanNaveh/repository/actions)
-[![Docker](https://img.shields.io/docker/automated/NitzanNaveh/repository)](https://hub.docker.com/r/NitzanNaveh/repository)
+[![CI Status](https://github.com/NitzanNaveh/password-generator/actions/workflows/main_pull.yml/badge.svg)](https://github.com/NitzanNaveh/password-generator/actions)
+[![CD Status](https://github.com/NitzanNaveh/password-generator/actions/workflows/main.yml/badge.svg)](https://github.com/NitzanNaveh/password-generator/actions)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nitzannaveh/password-generator)](https://hub.docker.com/r/nitzannaveh/password-generator)
 
-This project implements a full-stack application with a comprehensive DevOps pipeline that automates everything from infrastructure creation to application deployment on AWS. The entire workflow is defined as code, ensuring a robust, repeatable, and scalable deployment process.
+This project demonstrates a complete, end-to-end DevOps pipeline that automates the entire lifecycle of a web application—from infrastructure creation on AWS to continuous deployment. The application is a NodeJS Password Generator, showcasing modern DevOps practices and tools in action.
 
 ## 🛠️ Technology Stack
 
 | Category | Technology | Purpose |
 |----------|------------|---------|
 | Cloud Provider | AWS | Hosting the production environment (EC2, VPC) |
-| Infrastructure as Code | Ansible | Provisioning the VPC, EC2 instance, and installing Docker |
-| Containerization | Docker & Docker Compose | Packaging the full-stack app into a single, portable container |
+| Infrastructure as Code | Ansible | Provisioning VPC, EC2 instance, and installing dependencies |
+| Containerization | Docker & Docker Compose | Packaging the application into a portable container |
 | Container Registry | Docker Hub | Storing and distributing the application's Docker image |
-| CI/CD Automation | GitHub Actions | Orchestrating the entire build, test, and deployment workflow |
-| Automated Testing | Selenium with Python | Performing automated end-to-end testing on the live application |
+| CI/CD Automation | GitHub Actions | Orchestrating the build, test, and deployment workflow |
+| Automated Testing | Selenium with Python | Performing automated E2E testing |
+| Application | NodeJS | Password Generator web application |
 
 ## 🔄 Automated Workflow Architecture
 
-The pipeline is event-driven, triggered by developer actions in GitHub, and ensures that only tested and validated code reaches production.
-
 ```mermaid
 graph LR
-    A[Code Push] --> B[GitHub Pull Request]
-    B --> C[CI Pipeline: Build & Test]
-    C --> D[Merge to Main]
-    D --> E[CD Pipeline: Push & Deploy]
-    E --> F[Live on AWS EC2]
+    A[Code Push to Feature Branch] --> B[Create Pull Request]
+    B --> C{CI Pipeline: Test PR}
+    C -- Tests Pass --> D[Merge to main]
+    C -- Tests Fail --> X[Block Merge]
+    D --> E{CD Pipeline: Deploy}
+    E --> F[Push to Docker Hub]
+    F --> G[Deploy on AWS EC2]
+    G --> H[🚀 Application Live]
 ```
 
 ## 🏗️ Infrastructure Provisioning with Ansible
 
-The entire AWS infrastructure is provisioned from scratch using an Ansible Playbook, guaranteeing a consistent and reproducible environment.
-
 ### Network Setup
-- Creates a custom VPC
-- Configures Public Subnet
-- Sets up Internet Gateway
-- Establishes Route Tables
+- Custom VPC for resource isolation
+- Public Subnet configuration
+- Internet Gateway and Route Tables setup
+- Security Group allowing HTTP (80) and SSH (22)
 
 ### Server Provisioning
-- Launches Ubuntu EC2 instance
-- Configures Security Group
-  - HTTP (port 80)
-  - SSH (port 22)
-- Installs dependencies (Docker + Docker Compose)
-
-## 📦 Full-Stack Containerization with Docker
-
-A multi-stage Dockerfile optimizes the build process and creates a self-contained image for the entire application.
-
-### Build Stage
-```dockerfile
-# First stage: Build React frontend
-FROM node:16 as builder
-WORKDIR /app
-COPY frontend/ ./
-RUN npm install && npm run build
-
-# Final stage: Production environment
-FROM node:16-slim
-COPY backend/ ./
-COPY --from=builder /app/build ./public
-EXPOSE 80
-CMD ["npm", "start"]
-```
-
-### Docker Compose Configuration
 ```yaml
-version: '3'
-services:
-  app:
-    image: NitzanNaveh/repository
-    ports:
-      - "80:80"
-    environment:
-      - MONGODB_URI
-      - LISTEN_NOTES_API_KEY
+# Example Ansible task
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
 ```
 
-## 🔄 CI/CD Pipeline with GitHub Actions
+## 📦 Containerization
 
-### CI Workflow (On Pull Request)
-The CI workflow acts as a quality gate before code merging:
-1. Builds the full-stack Docker image
-2. Executes Selenium test suite
-3. Validates all tests pass before allowing merge
+### Dockerfile
+```dockerfile
+# Use Node.js LTS
+FROM node:16.14
 
-### CD Workflow (On Merge to main)
-The CD workflow handles automatic deployment:
-1. Builds and pushes Docker image to Docker Hub
-2. Connects to production EC2 via SSH
-3. Updates container with zero-downtime deployment:
-   ```bash
-   docker-compose pull
-   docker-compose up -d --force-recreate
-   ```
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start command
+CMD [ "npm", "start" ]
+```
+
+### Docker Compose
+```yaml
+version: '3.3'
+services:
+  web:
+    image: nitzannaveh/password-generator:latest
+    container_name: pass_gen
+    ports:
+      - "80:3000"
+    restart: unless-stopped
+```
+
+## 🔄 CI/CD Pipeline
+
+### CI Workflow (Pull Requests)
+- Builds Docker image
+- Runs container in GitHub Actions
+- Executes Selenium tests
+- Blocks merge if tests fail
+
+### CD Workflow (Main Branch)
+- Builds and pushes to Docker Hub
+- Deploys to AWS EC2
+- Performs zero-downtime deployment:
+```bash
+docker-compose pull
+docker-compose up -d --force-recreate
+```
 
 ## 🚀 Getting Started
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/NitzanNaveh/repository.git
-   ```
+### Prerequisites
+- AWS Account with configured credentials
+- Ansible installed locally
+- Docker and Docker Compose installed
 
-2. Install dependencies
-   ```bash
-   npm install
-   ```
+### Local Development
+```bash
+# Clone repository
+git clone https://github.com/NitzanNaveh/password-generator.git
+cd password-generator
 
-3. Set up environment variables
-   ```bash
-   cp .env.example .env
-   # Edit .env with your credentials
-   ```
+# Install dependencies
+npm install
 
-4. Run locally with Docker Compose
-   ```bash
-   docker-compose up
-   ```
+# Start development server
+npm run dev
+```
+
+### Required GitHub Secrets
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
+- `SSH_PRIVATE_KEY`
+- `HOST`
+
+## 📂 Project Structure
+```
+.
+├── ansible/                # Infrastructure as Code
+│   ├── playbooks/
+│   └── roles/
+├── .github/
+│   └── workflows/         # CI/CD pipelines
+├── src/                   # Application source
+├── tests/                 # Selenium E2E tests
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
+```
 
 ## 📝 Contributing
 
@@ -133,12 +160,8 @@ The CD workflow handles automatic deployment:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
+## 👤 Author
 
-* **Nitzan Naveh** - *Initial work* - [NitzanNaveh](https://github.com/NitzanNaveh)
+**Nitzan Naveh** - [NitzanNaveh](https://github.com/NitzanNaveh)
 
-## 🙏 Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+_Last updated: 2025-08-26_
