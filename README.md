@@ -1,8 +1,9 @@
-# Full-Stack Application with Automated DevOps Pipeline 🚀
+# Full-Stack App with Automated DevOps Pipeline (AWS + Docker + Ansible) 🚀
 
-[![CI Status](https://github.com/NitzanNaveh/password-generator/actions/workflows/main_pull.yml/badge.svg)](https://github.com/NitzanNaveh/password-generator/actions)
-[![CD Status](https://github.com/NitzanNaveh/password-generator/actions/workflows/main.yml/badge.svg)](https://github.com/NitzanNaveh/password-generator/actions)
-[![Docker Pulls](https://img.shields.io/docker/pulls/nitzannaveh/password-generator)](https://hub.docker.com/r/nitzannaveh/password-generator)
+[![CI Status](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml/badge.svg?branch=main&event=pull_request)](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml)
+[![CD Status](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/NitzanNaveh/devops-project/actions/workflows/build.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nitzannaveh/moodcast)](https://hub.docker.com/r/nitzannaveh/moodcast)
+
 
 This project demonstrates a complete, end-to-end DevOps pipeline that automates the entire lifecycle of a web application—from infrastructure creation on AWS to continuous deployment. The application is a NodeJS Password Generator, showcasing modern DevOps practices and tools in action.
 
@@ -16,7 +17,7 @@ This project demonstrates a complete, end-to-end DevOps pipeline that automates 
 | Container Registry | Docker Hub | Storing and distributing the application's Docker image |
 | CI/CD Automation | GitHub Actions | Orchestrating the build, test, and deployment workflow |
 | Automated Testing | Selenium with Python | Performing automated E2E testing |
-| Application | NodeJS | Password Generator web application |
+| Application | NodeJS | Podcast recommendation web application |
 
 ## 🔄 Automated Workflow Architecture
 
